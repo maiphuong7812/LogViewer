@@ -1,0 +1,14 @@
+D:\Project\DestopApp\LogViewer\bin\Debug\LogViewer.exe.config
+D:\Project\DestopApp\LogViewer\bin\Debug\LogViewer.exe
+D:\Project\DestopApp\LogViewer\bin\Debug\LogViewer.pdb
+D:\Project\DestopApp\LogViewer\obj\Debug\LogViewer.csprojAssemblyReference.cache
+D:\Project\DestopApp\LogViewer\obj\Debug\MainWindow.g.cs
+D:\Project\DestopApp\LogViewer\obj\Debug\App.g.cs
+D:\Project\DestopApp\LogViewer\obj\Debug\LogViewer_MarkupCompile.cache
+D:\Project\DestopApp\LogViewer\obj\Debug\LogViewer_MarkupCompile.lref
+D:\Project\DestopApp\LogViewer\obj\Debug\MainWindow.baml
+D:\Project\DestopApp\LogViewer\obj\Debug\LogViewer.g.resources
+D:\Project\DestopApp\LogViewer\obj\Debug\LogViewer.Properties.Resources.resources
+D:\Project\DestopApp\LogViewer\obj\Debug\LogViewer.csproj.GenerateResource.cache
+D:\Project\DestopApp\LogViewer\obj\Debug\LogViewer.exe
+D:\Project\DestopApp\LogViewer\obj\Debug\LogViewer.pdb
