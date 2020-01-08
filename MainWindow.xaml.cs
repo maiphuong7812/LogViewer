@@ -26,6 +26,34 @@ namespace LogViewer
         public MainWindow()
         {
             InitializeComponent();
+
+            List<Rule> rules = new List<Rule>();
+
+            Rule rule = new Rule();
+            rule.type = RuleType.Fit;
+            rule.op = Operator.Greater;
+            rule.value = 5;
+            rules.Add(rule);
+
+            Rule rule2 = new Rule();
+            rule2.type = RuleType.Unfit;
+            rule2.op = Operator.GreaterOrEqual;
+            rule2.value = 15;
+            rules.Add(rule2);
+
+            Rule rule3 = new Rule();
+            rule3.type = RuleType.Suspect;
+            rule3.op = Operator.LessThanOrEqual;
+            rule3.value = 5;
+            rules.Add(rule3);
+
+            Rule rule4 = new Rule();
+            rule4.type = RuleType.Reject;
+            rule4.op = Operator.LessThan;
+            rule4.value = 3;
+            rules.Add(rule4);
+
+            var tmp = GetRange(rules, RuleType.Unfit);
         }
 
         private void Update_Click(object sender, RoutedEventArgs e)
@@ -35,13 +63,16 @@ namespace LogViewer
             BackgroundWorker bw = new BackgroundWorker();
             bool isCreate = (bool)createLogRadio.IsChecked;
             bool isMerge = (bool)mergeLogRadio.IsChecked;
+            if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "\\..\\..\\data")) {
+                Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "\\..\\..\\data");
+            }
             bw.DoWork += (send, ee) =>
             {
                 stopWatch.Start();
                 if (isCreate == true)
                 {
                     int logNum = 0;
-                    int logCount = 1500000;
+                    int logCount = 1000000;
                     List<StreamWriter> sWriters = new List<StreamWriter>();
                     for (int i = 0; i < 15; i++)
                     {
@@ -65,7 +96,7 @@ namespace LogViewer
                             logNum++;
                         }
 
-                        while (logNum < logCount + 50000)
+                        while (logNum < logCount + 5000)
                         {
 
                             var logLine = DateTime.Now.ToString("hh:mm:ss.fff") + " " + logNum.ToString().PadLeft(50, '0');
@@ -253,5 +284,86 @@ namespace LogViewer
                 }
             }
         }
+
+        private int[] GetRange(List<Rule> rules, RuleType type) {
+            int[] res = new int[2];
+            Rule tmp = new Rule();
+            foreach(var rule in rules)
+            {
+                if(rule.type == type)
+                {
+                    tmp = rule;
+                    break;
+                }
+            }
+
+            if (tmp.op == Operator.Equal || tmp.op == Operator.NotEqual)
+            {
+                res[0] = res[1] = tmp.value;
+            }
+            else 
+            {
+                res[0] = tmp.value;
+                if (tmp.op == Operator.Greater || tmp.op == Operator.GreaterOrEqual) {
+                    res[1] = FindGreaterMin(rules, tmp.value);
+                }
+                else
+                {
+                    res[1] = FindLessThanMax(rules, tmp.value);
+                }
+            }
+            return res;
+        }
+
+        private int FindGreaterMin(List<Rule> rules, int val) {
+            int min = int.MaxValue;
+            foreach(var rule in rules)
+            {
+                if (rule.value > val && rule.value < min)
+                {
+                    min = rule.value;
+                }
+            }
+
+            return min;
+        }
+
+        private int FindLessThanMax(List<Rule> rules, int val) {
+            int max = int.MinValue;
+            foreach (var rule in rules)
+            {
+                if (rule.value < val && rule.value > max)
+                {
+                    max = rule.value;
+                }
+            }
+
+            return max;
+        }
+    }
+
+
+    public enum RuleType { 
+        Reject,
+        Suspect,
+        Fit,
+        Unfit
+    }
+
+    public struct Rule
+    {
+        public int ruleNum;
+        public int value;
+        public Operator op;
+        public RuleType type;
+    }
+
+    public enum Operator { 
+        Greater,
+        LessThan,
+        Equal,
+        GreaterOrEqual,
+        LessThanOrEqual,
+        NotEqual
     }
 }
